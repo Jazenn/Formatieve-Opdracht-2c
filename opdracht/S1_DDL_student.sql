@@ -77,7 +77,24 @@ WHERE mnr = 8000;
 --   c) Op enig moment gaat het mis. De betreffende kolommen zijn te klein voor
 --      nummers van 3 cijfers. Los dit probleem op.
 
+CREATE SEQUENCE anr_seq
+AS BIGINT
+START WITH 60
+INCREMENT BY 10
+MAXVALUE 99999
+NO CYCLE
+CACHE 10;
 
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('anr_seq'), 'PR', 'DRENTHE', 7839);
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('anr_seq'), 'HR', 'HOUTEN', 7839);
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(nextval('anr_seq'), 'IT', 'CULEMBORG', 7839);
+
+DROP SEQUENCE IF EXISTS anr_seq;
+
+ALTER TABLE afdelingen ALTER COLUMN anr TYPE numeric(20);
 
 
 -- S1.4. Adressen
