@@ -35,6 +35,16 @@
 -- geaccepteerd. Test deze regel en neem de gegooide foutmelding op als
 -- commentaar in de uitwerking.
 
+ALTER TABLE medewerkers
+ADD COLUMN geslacht varchar(1),
+ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'M' or geslacht = 'V');
+--ALTER TABLE medewerkers
+-- ADD COLUMN geslacht varchar(1),
+-- ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'M' or geslacht = 'V')
+-- [2023-03-10 15:34:45] 0 row(s) affected in 11 ms
+
+
+
 
 -- S1.2. Nieuwe afdeling
 --
@@ -43,6 +53,8 @@
 -- nieuwe medewerker A DONK aangenomen. Hij krijgt medewerkersnummer 8000
 -- en valt direct onder de directeur.
 -- Voeg de nieuwe afdeling en de nieuwe medewerker toe aan de database.
+
+
 
 
 -- S1.3. Verbetering op afdelingentabel
@@ -54,6 +66,8 @@
 --      de nieuwe sequence.
 --   c) Op enig moment gaat het mis. De betreffende kolommen zijn te klein voor
 --      nummers van 3 cijfers. Los dit probleem op.
+
+
 
 
 -- S1.4. Adressen
@@ -68,6 +82,8 @@
 --    einddatum     moet na de ingangsdatum liggen
 --    telefoon      10 cijfers, uniek
 --    med_mnr       FK, verplicht
+
+
 
 
 -- S1.5. Commissie
