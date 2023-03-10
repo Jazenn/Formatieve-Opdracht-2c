@@ -54,6 +54,16 @@ ADD CONSTRAINT m_geslacht_chk CHECK (geslacht = 'M' or geslacht = 'V');
 -- en valt direct onder de directeur.
 -- Voeg de nieuwe afdeling en de nieuwe medewerker toe aan de database.
 
+INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd, geslacht)
+VALUES (8000, 'DONK', 'A', 'CO-DIRECT', null, '1999-12-01', 3600, null, default, 'M');
+
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(50, 'ONDERZOEK', 'ZWOLLE', 8000);
+
+UPDATE medewerkers
+SET afd = 50
+WHERE mnr = 8000;
+
 
 
 
