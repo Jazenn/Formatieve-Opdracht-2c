@@ -135,6 +135,11 @@ VALUES('5678AB', 18, '2023-03-13', '2023-03-14', 1234567890, 8000);
 -- 'VERKOPER' heeft, anders moet de commissie NULL zijn. Schrijf hiervoor een beperkingsregel. Gebruik onderstaande
 -- 'illegale' INSERTs om je beperkingsregel te controleren.
 
+ALTER TABLE medewerkers
+ADD CHECK((functie = 'VERKOPER' and comm IS NOT NULL) or (functie != 'VERKOPER' and comm IS NULL));
+
+
+
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
 VALUES (8001, 'MULLER', 'TJ', 'TRAINER', 7566, '1982-08-18', 2000, 500);
 
