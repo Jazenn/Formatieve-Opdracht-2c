@@ -77,6 +77,8 @@ WHERE mnr = 8000;
 --   c) Op enig moment gaat het mis. De betreffende kolommen zijn te klein voor
 --      nummers van 3 cijfers. Los dit probleem op.
 
+DROP SEQUENCE IF EXISTS anr_seq;
+
 CREATE SEQUENCE anr_seq
 AS BIGINT
 START WITH 60
@@ -91,8 +93,6 @@ INSERT INTO afdelingen(anr, naam, locatie, hoofd)
 VALUES(nextval('anr_seq'), 'HR', 'HOUTEN', 7839);
 INSERT INTO afdelingen(anr, naam, locatie, hoofd)
 VALUES(nextval('anr_seq'), 'IT', 'CULEMBORG', 7839);
-
-DROP SEQUENCE IF EXISTS anr_seq;
 
 ALTER TABLE afdelingen ALTER COLUMN anr TYPE numeric(20);
 
@@ -109,6 +109,22 @@ ALTER TABLE afdelingen ALTER COLUMN anr TYPE numeric(20);
 --    einddatum     moet na de ingangsdatum liggen
 --    telefoon      10 cijfers, uniek
 --    med_mnr       FK, verplicht
+
+DROP TABLE IF EXISTS adressen;
+
+CREATE TABLE adressen(
+    postcode CHAR(6),
+    huisnummer numeric(10),
+    ingangsdatum date,
+    einddatum date NOT NULL CHECK(einddatum > ingangsdatum),
+    telefoon CHAR(10) UNIQUE NOT NULL CHECK(char_length(telefoon) = 10),
+    med_mnr numeric(4) NOT NULL,
+    PRIMARY KEY (postcode, huisnummer, ingangsdatum),
+    FOREIGN KEY (med_mnr) REFERENCES medewerkers(mnr)
+);
+
+INSERT INTO adressen(postcode, huisnummer, ingangsdatum, einddatum, telefoon, med_mnr)
+VALUES('5678AB', 18, '2023-03-13', '2023-03-14', 1234567890, 8000);
 
 
 
