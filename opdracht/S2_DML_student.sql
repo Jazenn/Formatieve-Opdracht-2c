@@ -84,7 +84,12 @@ ON CONFLICT DO NOTHING;                                                         
 --
 -- We breiden het salarissysteem uit naar zes schalen. Voer een extra schaal in voor mensen die
 -- tussen de 3001 en 4000 euro verdienen. Zij krijgen een toelage van 500 euro.
-INSERT
+UPDATE schalen
+set bovengrens = 4000
+WHERE snr = 5;
+
+INSERT INTO schalen(snr, ondergrens, bovengrens, toelage)
+VALUES(6, 4001, 9999, 500)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -93,17 +98,23 @@ ON CONFLICT DO NOTHING;                                                         
 -- Er wordt een nieuwe 6-daagse cursus 'Data & Persistency' in het programma opgenomen.
 -- Voeg deze cursus met code 'D&P' toe, maak twee uitvoeringen in Leerdam en schrijf drie
 -- mensen in.
-INSERT
+INSERT INTO cursussen(code, omschrijving, type, lengte)
+VALUES('D&P', 'Een cursus voor Data & Persistency', 'DSG', 6)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
-INSERT
+INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
+VALUES('D&P', '2023-03-06', 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
-INSERT
+INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
+VALUES('D&P', '2023-05-06', 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
-INSERT
+INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
+VALUES(7369, 'D&P', '2023-05-06', 4)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
-INSERT
+INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
+VALUES(7369, 'D&P', '2023-03-06', 4)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
-INSERT
+INSERT INTO inschrijvingen(cursist, cursus, begindatum, evaluatie)
+VALUES(7369, 'D&P', '2023-03-06', 4)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -112,6 +123,13 @@ ON CONFLICT DO NOTHING;                                                         
 -- De medewerkers van de afdeling VERKOOP krijgen een salarisverhoging
 -- van 5.5%, behalve de manager van de afdeling, deze krijgt namelijk meer: 7%.
 -- Voer deze verhogingen door.
+
+UPDATE medewerkers
+SET maandsal = CASE
+    when mnr = 7698 then maandsal * 1.07
+    WHEN functie = 'VERKOPER' then maandsal * 1.055
+    ELSE maandsal
+    END;
 
 
 -- S2.10. Concurrent
@@ -122,16 +140,25 @@ ON CONFLICT DO NOTHING;                                                         
 -- Zijn collega Alders heeft ook plannen om te vertrekken. Verwijder ook zijn gegevens.
 -- Waarom lukt dit (niet)?
 
+DELETE FROM medewerkers
+WHERE mnr = 7654;
+
+-- DELETE FROM medewerkers
+-- WHERE mnr = 7499;
+-- Deze query lukt niet, omdat Alders nog steeds ingeschreven staat bij een cursus.
 
 -- S2.11. Nieuwe afdeling
 --
 -- Je wordt hoofd van de nieuwe afdeling 'FINANCIEN' te Leerdam,
 -- onder de hoede van De Koning. Kies een personeelnummer boven de 8000.
 -- Zorg voor de juiste invoer van deze gegevens.
-INSERT
+
+INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm)
+VALUES(8069, 'Griffioen', 'J', 'MANAGER', 7839, '2001-09-13', 9999, null)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
-INSERT
+INSERT INTO afdelingen(anr, naam, locatie, hoofd)
+VALUES(50, 'FINANCIEN', 'LEERDAM', 8069)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -166,7 +193,7 @@ DELETE FROM uitvoeringen WHERE cursus = 'D&P';
 DELETE FROM cursussen WHERE code = 'D&P';
 DELETE FROM uitvoeringen WHERE locatie = 'LEERDAM';
 INSERT INTO medewerkers (mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd)
-VALUES (7654, 'MARTENS', 'P', 'VERKOPER', 7698, '28-09-1976', 1250, 1400, 30);
+VALUES (7654, 'MARTENS', 'P', 'VERKOPER', 7698, '1976-09-28', 1250, 1400, 30);
 UPDATE medewerkers SET maandsal = 1600 WHERE mnr = 7499;
 UPDATE medewerkers SET maandsal = 1250 WHERE mnr = 7521;
 UPDATE medewerkers SET maandsal = 2850 WHERE mnr = 7698;
