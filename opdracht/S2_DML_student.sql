@@ -30,35 +30,44 @@
 -- S2.1. Vier-daagse cursussen
 --
 -- Geef code en omschrijving van alle cursussen die precies vier dagen duren.
--- DROP VIEW IF EXISTS s2_1; CREATE OR REPLACE VIEW s2_1 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s2_1; CREATE OR REPLACE VIEW s2_1 AS                                                     -- [TEST]
 
+SELECT code, omschrijving FROM cursussen
+WHERE lengte = 4;
 
 -- S2.2. Medewerkersoverzicht
 --
 -- Geef alle informatie van alle medewerkers, gesorteerd op functie,
 -- en per functie op leeftijd (van jong naar oud).
--- DROP VIEW IF EXISTS s2_2; CREATE OR REPLACE VIEW s2_2 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s2_2; CREATE OR REPLACE VIEW s2_2 AS                                                     -- [TEST]
 
+SELECT * FROM medewerkers
+ORDER BY functie, gbdatum;
 
 -- S2.3. Door het land
 --
 -- Welke cursussen zijn in Utrecht en/of in Maastricht uitgevoerd? Geef
 -- code en begindatum.
--- DROP VIEW IF EXISTS s2_3; CREATE OR REPLACE VIEW s2_3 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s2_3; CREATE OR REPLACE VIEW s2_3 AS                                                     -- [TEST]
 
+SELECT cursus, begindatum from uitvoeringen
+WHERE locatie = 'UTRECHT' or locatie = 'MAASTRICHT';
 
 -- S2.4. Namen
 --
 -- Geef de naam en voorletters van alle medewerkers, behalve van R. Jansen.
--- DROP VIEW IF EXISTS s2_4; CREATE OR REPLACE VIEW s2_4 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s2_4; CREATE OR REPLACE VIEW s2_4 AS                                                     -- [TEST]
 
+SELECT naam, voorl FROM medewerkers
+WHERE naam != 'Jansen' and voorl != 'R';
 
 -- S2.5. Nieuwe SQL-cursus
 --
 -- Er wordt een nieuwe uitvoering gepland voor cursus S02, en wel op de
 -- komende 2 maart. De cursus wordt gegeven in Leerdam door Nick Smit.
 -- Voeg deze gegevens toe.
-INSERT
+INSERT INTO uitvoeringen(cursus, begindatum, docent, locatie)
+VALUES('S02', '2023-03-02', 7369, 'LEERDAM')
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
@@ -66,7 +75,8 @@ ON CONFLICT DO NOTHING;                                                         
 --
 -- Neem één van je collega-studenten aan als stagiair ('STAGIAIR') en
 -- voer zijn of haar gegevens in. Kies een personeelnummer boven de 8000.
-INSERT
+INSERT INTO medewerkers(mnr, naam, voorl, functie, chef, gbdatum, maandsal, comm, afd)
+VALUES(8420, 'Meijer', 'T', 'STAGAIRE', 7839, '2002-05-06', 1400.00, null, 30)
 ON CONFLICT DO NOTHING;                                                                                         -- [TEST]
 
 
