@@ -31,12 +31,18 @@
 -- code, de begindatum, de lengte en de naam van de docent.
 -- DROP VIEW IF EXISTS s3_1; CREATE OR REPLACE VIEW s3_1 AS                                                     -- [TEST]
 
+SELECT code, begindatum, lengte, docent
+FROM uitvoeringen JOIN cursussen c on uitvoeringen.cursus = c.code;
 
 -- S3.2.
 -- Geef in twee kolommen naast elkaar de achternaam van elke cursist (`cursist`)
 -- van alle S02-cursussen, met de achternaam van zijn cursusdocent (`docent`).
 -- DROP VIEW IF EXISTS s3_2; CREATE OR REPLACE VIEW s3_2 AS                                                     -- [TEST]
 
+SELECT naam as cursist, naam as docent FROM medewerkers
+JOIN inschrijvingen i on medewerkers.mnr = i.cursist
+JOIN uitvoeringen u on i.cursus = u.cursus and i.begindatum = u.begindatum
+WHERE u.cursus = 'S02';
 
 -- S3.3.
 -- Geef elke afdeling (`afdeling`) met de naam van het hoofd van die
