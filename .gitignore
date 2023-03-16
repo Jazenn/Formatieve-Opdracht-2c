@@ -99,7 +99,7 @@ fabric.properties
 
 
 ### Personal ignores
-.idea/
+/.idea/
 practicum/feedback.txt
 practicum/Hibernate_stappen.txt
 practicum/lib/
