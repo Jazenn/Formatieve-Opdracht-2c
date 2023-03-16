@@ -49,24 +49,33 @@ WHERE u.cursus = 'S02';
 -- afdeling (`hoofd`).
 -- DROP VIEW IF EXISTS s3_3; CREATE OR REPLACE VIEW s3_3 AS                                                     -- [TEST]
 
-
+SELECT afdelingen.naam as afdeling_naam, m.naam as hoofd_naam from afdelingen
+JOIN medewerkers m on afdelingen.hoofd = m.mnr
+WHERE afdelingen.hoofd = m.mnr;
 
 -- S3.4.
 -- Geef de namen van alle medewerkers, de naam van hun afdeling (`afdeling`)
 -- en de bijbehorende locatie.
 -- DROP VIEW IF EXISTS s3_4; CREATE OR REPLACE VIEW s3_4 AS                                                     -- [TEST]
 
+SELECT medewerkers.naam as medewerker_naam, afdelingen.naam as afdeling_naam, afdelingen.locatie as afdeling_locatie FROM medewerkers
+JOIN afdelingen on medewerkers.afd = afdelingen.anr;
+
 
 -- S3.5.
 -- Geef de namen van alle cursisten die staan ingeschreven voor de cursus S02 van 12 april 2019
 -- DROP VIEW IF EXISTS s3_5; CREATE OR REPLACE VIEW s3_5 AS                                                     -- [TEST]
 
+SELECT medewerkers.naam FROM inschrijvingen
+JOIN medewerkers on inschrijvingen.cursist = medewerkers.mnr
+WHERE cursus = 'S02' and begindatum = '2019-04-12';
 
 -- S3.6.
 -- Geef de namen van alle medewerkers en hun toelage.
 -- DROP VIEW IF EXISTS s3_6; CREATE OR REPLACE VIEW s3_6 AS                                                     -- [TEST]
 
-
+SELECT medewerkers.naam as medewerker_naam, schalen.toelage as schaal_toelage FROM medewerkers, schalen
+WHERE medewerkers.maandsal > schalen.ondergrens and medewerkers.maandsal < schalen.bovengrens;
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
 -- Met onderstaande query kun je je code testen. Zie bovenaan dit bestand
